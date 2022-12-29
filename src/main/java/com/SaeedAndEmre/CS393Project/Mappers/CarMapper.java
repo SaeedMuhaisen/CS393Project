@@ -17,5 +17,4 @@ public interface CarMapper {
     List<CarDTO> toCarDTOs(List<Car> cars);
     List<Car> toCars(List<CarDTO> CarDTO);
 
-
 }
