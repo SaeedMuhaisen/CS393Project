@@ -15,4 +15,5 @@ public interface CarRepository extends JpaRepository<Car,Long> {
     @Query(value = "select * from Car c where c.status='LOANED' or c.status='RESERVED'", nativeQuery = true)
     List<Car> findAllRented();
     Car findById(long barcode);
+    Car findByBarcode(long barcode);
 }

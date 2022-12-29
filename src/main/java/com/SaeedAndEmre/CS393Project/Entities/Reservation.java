@@ -1,6 +1,8 @@
 package com.SaeedAndEmre.CS393Project.Entities;
 
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +17,6 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
-
     private LocalDateTime creationDate;
     private LocalDateTime pickUpDate;
     private LocalDateTime dropOffDate;
@@ -27,7 +28,7 @@ public class Reservation {
     private Location dropOffLocation;
     private LocalDateTime returnDate;
     @Enumerated(EnumType.STRING)
-    private ReservationStatus status; //initially should be none
+    private ReservationStatus status=ReservationStatus.NONE; //initially should be none
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -37,7 +38,15 @@ public class Reservation {
     @ManyToMany
     private List<Services> services = new ArrayList<>();
 
-    private enum ReservationStatus {
+    public List<Services> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Services> services) {
+        this.services = services;
+    }
+
+    public enum ReservationStatus {
         ACTIVE,
         PENDING,
         CONFIRMED,

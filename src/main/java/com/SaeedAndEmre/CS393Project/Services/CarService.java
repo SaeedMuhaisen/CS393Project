@@ -41,5 +41,8 @@ public class CarService {
     public Car save(Car car) {
         return carRepository.save(car);
     }
+    public Car findByBarcode(Long barcode){
+        return carRepository.findByBarcode(barcode);
+    }
 }
 

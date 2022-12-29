@@ -5,9 +5,9 @@ import javax.persistence.*;
 public class Location {
     //TODO: Are we using name and code as id, or just name?
     @Id
-    private String name;
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int code;
+    private String name;
     private String address;
 
     public String getName() {
