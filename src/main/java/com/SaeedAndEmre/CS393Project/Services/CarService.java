@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,31 +21,52 @@ public class CarService {
     CarRepository carRepository;
 
 
-    public List<CarDTO> findAvailableByTypeAndTransmission(TypeAndTransmissionDTO typeAndTransmissionDTO) {
-        List<Car> cars=carRepository.findAvailableByTypeAndTransmission(typeAndTransmissionDTO.getType(),
+    public List<CarDTO> findAvailableByTypeAndTransmission(TypeAndTransmissionDTO typeAndTransmissionDTO){
+        Optional<List<Car>> cars=carRepository.findAvailableByTypeAndTransmission(typeAndTransmissionDTO.getType(),
                 typeAndTransmissionDTO.getTransmissionType());
-        List<CarDTO> carDTOS=CarMapper.INSTANCE.toCarDTOs(cars);
-        return carDTOS;
+        if(!cars.isPresent()){
+            throw new EmptyResultDataAccessException(1);
+        }
+        return CarMapper.INSTANCE.toCarDTOs(cars.get());
     }
     public List<CarDTO> findAllRented() {
-        return CarMapper.INSTANCE.toCarDTOs(carRepository.findAllRented());
-    }
-
-    public List<Car> findAll() {
-        return carRepository.findAll();
-    }
-
-
-
-
-    public Boolean deleteById(long barcode) {
-        try {
-            Car car = carRepository.findById(barcode);
-            carRepository.deleteById(barcode);
-            return true;
-        }catch (EmptyResultDataAccessException e){
-            return false;
+        Optional<List<Car>> result= carRepository.findAllRented();
+        if(!result.isPresent()){
+            throw new EmptyResultDataAccessException(1);
         }
+        return CarMapper.INSTANCE.toCarDTOs(result.get());
+    }
+
+    public List<CarDTO> findAll() {
+
+        List<Car> cars=carRepository.findAll();
+        if(cars.isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }
+        else{
+            return CarMapper.INSTANCE.toCarDTOs(cars);
+        }
+
+    }
+
+
+
+    @Transactional(rollbackFor = {EmptyResultDataAccessException.class})
+    public Boolean deleteById(long barcode) {
+            Optional<Car> car = carRepository.findById(barcode);
+            if(car.isPresent() ) {
+                if(car.get().getStatus()!= Car.CarStatus.AVAILABLE
+                        || car.get().getStatus()== Car.CarStatus.RESERVED){
+                    return false;
+                }
+                else{
+                    carRepository.deleteById(car.get().getBarcode());
+                    return true;
+                }
+            }
+            else{
+                throw new EmptyResultDataAccessException(1);
+            }
 
     }
 
@@ -52,6 +74,7 @@ public class CarService {
         Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
         return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.save(car));
     }
+
     public CreateCarDTO update(CreateCarDTO createCarDTO){
         Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
         return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.update(car));

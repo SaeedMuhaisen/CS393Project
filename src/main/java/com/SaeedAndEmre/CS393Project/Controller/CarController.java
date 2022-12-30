@@ -9,10 +9,12 @@ import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Services.CarService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -26,30 +28,55 @@ public class CarController {
     //DONE
     @RequestMapping(value="/cars",method= RequestMethod.GET)
     public ResponseEntity<List<CarDTO>> findAvailableByTypeAndTransmission(@io.swagger.v3.oas.annotations.parameters.RequestBody TypeAndTransmissionDTO typeAndTransmissionDTO){
-
+        try {
             List<CarDTO> carDTOS = carService.findAvailableByTypeAndTransmission(typeAndTransmissionDTO);
-        if(!carDTOS.isEmpty()){
             return new ResponseEntity<>(carDTOS,HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
+       catch(EmptyResultDataAccessException e) {
+           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       }
     }
     //DONE
     @GetMapping(value="/cars/unavailable")
     public ResponseEntity<List<CarDTO>> findAllRented() {
-        List<CarDTO> carDTOS = carService.findAllRented();
-        if (!carDTOS.isEmpty()) {
+
+        try{
+            List<CarDTO> carDTOS = carService.findAllRented();
             return new ResponseEntity<>(carDTOS, HttpStatus.OK);
-        } else {
+        } catch(EmptyResultDataAccessException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
     //DONE
+    @DeleteMapping(value="/cars/{id}")
+    public ResponseEntity<Boolean> deleteById(@PathVariable (name="id",required = false) Long barcode){
+        try {
+            Boolean response = carService.deleteById(barcode);
+            if(response){
+                return new ResponseEntity(true, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+        }catch (Exception e){
+            if(e.getClass()==EmptyResultDataAccessException.class) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+    //DONE
     @GetMapping(value="/cars/all")
-    public List<CarDTO> findAll(){
-        List<Car> cars=carService.findAll();
-        return CarMapper.INSTANCE.toCarDTOs(cars);
+    public ResponseEntity<List<CarDTO>> findAll(){
+        try {
+            List<CarDTO> cars = carService.findAll();
+            return new ResponseEntity<>(cars,HttpStatus.OK);
+        }
+        catch(EmptyResultDataAccessException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
     //TODO:What type of exceptions can happen here?
     @RequestMapping(value="/cars/new",method = RequestMethod.POST)
@@ -69,13 +96,7 @@ public class CarController {
             carService.save(createCarDTO);
             return new ResponseEntity<>(createCarDTO,HttpStatus.OK);
     }
-    //DONE
-    @DeleteMapping(value="/cars/{id}")
-    public ResponseEntity<Boolean> deleteById(@RequestParam(name="id",required = false) Long barcode) {
-        Boolean response = carService.deleteById(barcode);
-        return new ResponseEntity(response, HttpStatus.OK);
 
-    }
 
     //EXTRA METHOD BUT EXCEPTION NOT WORKING
     @GetMapping(value="/cars/{id}")
