@@ -3,6 +3,7 @@ package com.SaeedAndEmre.CS393Project.Services;
 import com.SaeedAndEmre.CS393Project.DTO.ReservationDTO;
 import com.SaeedAndEmre.CS393Project.DTO.ReservationInfoDTO;
 import com.SaeedAndEmre.CS393Project.Entities.*;
+import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Mappers.ReservationMapper;
 import com.SaeedAndEmre.CS393Project.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class ReservationServices {
     public ReservationInfoDTO save(ReservationDTO reservationDTO){
         List<Equipment> equipments=equipmentRepository.findByEquipmentIds(reservationDTO.getEquipments());
         List<Services> services=servicesRepository.findAllById(reservationDTO.getServices());
-        Car car=carService.findByBarcode(reservationDTO.getBarcode());
+        Car car= CarMapper.INSTANCE.fromCreateCarDTOtoCar(carService.findByBarcode(reservationDTO.getBarcode()));
         Member member=memberRepository.findByMemberId(reservationDTO.getMemberId());
         Location pickUpLocation=locationRepository.findByCode(reservationDTO.getPickUpLocation());
         Location dropOffLocation=locationRepository.findByCode(reservationDTO.getDropOffLocation());

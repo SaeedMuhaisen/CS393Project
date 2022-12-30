@@ -9,6 +9,7 @@ import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Services.CarService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -74,6 +75,17 @@ public class CarController {
         Boolean response = carService.deleteById(barcode);
         return new ResponseEntity(response, HttpStatus.OK);
 
+    }
+
+    //EXTRA METHOD BUT EXCEPTION NOT WORKING
+    @GetMapping(value="/cars/{id}")
+    public ResponseEntity<CreateCarDTO> findByBarcode(@RequestParam(name="id",required = false) Long barcode) {
+            try {
+                CreateCarDTO createCarDTO = carService.findByBarcode(barcode);
+                return new ResponseEntity(createCarDTO, HttpStatus.OK);
+            }catch(Exception e){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
     }
 }
 

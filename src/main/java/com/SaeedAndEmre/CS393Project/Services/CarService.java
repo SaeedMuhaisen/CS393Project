@@ -56,8 +56,8 @@ public class CarService {
         Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
         return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.update(car));
     }
-    public Car findByBarcode(Long barcode){
-        return carRepository.findByBarcode(barcode);
+    public CreateCarDTO findByBarcode(Long barcode){
+        return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.findByBarcode(barcode));
     }
 }
 
