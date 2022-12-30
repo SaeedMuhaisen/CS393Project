@@ -1,10 +1,14 @@
 package com.SaeedAndEmre.CS393Project.DTO;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 
 public class ReservationDTO {
 
@@ -13,10 +17,10 @@ public class ReservationDTO {
     private Long memberId;
     private Integer pickUpLocation;
     private Integer dropOffLocation;
-    private List<Long> equipments = new ArrayList<>();
-    private List<Long> services = new ArrayList<>();
+    private Set<Long> equipments;
+    private Set<Long> services;
 
-    public ReservationDTO(Long barcode, int dayCount, Long memberId, Integer pickUpLocation, Integer dropOffLocation, List<Long> equipments, List<Long> services) {
+    public ReservationDTO(Long barcode, int dayCount, Long memberId, Integer pickUpLocation, Integer dropOffLocation, Set<Long> equipments, Set<Long> services) {
         this.barcode = barcode;
         this.dayCount = dayCount;
         this.memberId = memberId;
@@ -66,19 +70,19 @@ public class ReservationDTO {
         this.dropOffLocation = dropOffLocation;
     }
 
-    public List<Long> getEquipments() {
+    public Set<Long> getEquipments() {
         return equipments;
     }
 
-    public void setEquipments(List<Long> equipments) {
+    public void setEquipments(Set<Long> equipments) {
         this.equipments = equipments;
     }
 
-    public List<Long> getServices() {
+    public Set<Long> getServices() {
         return services;
     }
 
-    public void setServices(List<Long> services) {
+    public void setServices(Set<Long> services) {
         this.services = services;
     }
 }

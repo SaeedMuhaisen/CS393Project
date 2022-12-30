@@ -57,7 +57,14 @@ public class CarService {
         return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.update(car));
     }
     public CreateCarDTO findByBarcode(Long barcode){
-        return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.findByBarcode(barcode));
+        try{
+            CreateCarDTO res=CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.findByBarcode(barcode));
+            return res;
+        }catch (EmptyResultDataAccessException e){
+            System.out.println("CAR WAS NOT FOUND!!!!");
+            throw e;
+        }
+
     }
 }
 
