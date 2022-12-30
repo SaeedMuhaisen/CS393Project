@@ -13,7 +13,6 @@ public interface CarMapper {
     CarMapper INSTANCE= Mappers.getMapper(CarMapper.class);
     CarDTO toCarDTO(Car car);
     Car toCar(CarDTO carDTO);
-
     List<CarDTO> toCarDTOs(List<Car> cars);
     List<Car> toCars(List<CarDTO> CarDTO);
 

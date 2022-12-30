@@ -1,7 +1,9 @@
 package com.SaeedAndEmre.CS393Project.Services;
 
 import com.SaeedAndEmre.CS393Project.DTO.CarDTO;
+import com.SaeedAndEmre.CS393Project.DTO.TypeAndTransmissionDTO;
 import com.SaeedAndEmre.CS393Project.Entities.Car;
+import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Repositories.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,17 +17,21 @@ public class CarService {
     CarRepository carRepository;
 
 
-    public List<Car> findAvailableByTypeAndTransmission(String type, String transmission) {
-        return carRepository.findAvailableByTypeAndTransmission(type, transmission);
+    public List<CarDTO> findAvailableByTypeAndTransmission(TypeAndTransmissionDTO typeAndTransmissionDTO) {
+        List<Car> cars=carRepository.findAvailableByTypeAndTransmission(typeAndTransmissionDTO.getType(),
+                typeAndTransmissionDTO.getTransmissionType());
+        List<CarDTO> carDTOS=CarMapper.INSTANCE.toCarDTOs(cars);
+        return carDTOS;
+    }
+    public List<CarDTO> findAllRented() {
+        return CarMapper.INSTANCE.toCarDTOs(carRepository.findAllRented());
     }
 
     public List<Car> findAll() {
         return carRepository.findAll();
     }
 
-    public List<Car> findAllRented() {
-        return carRepository.findAllRented();
-    }
+
 
     public void update(Car car) {
         carRepository.save(car);
