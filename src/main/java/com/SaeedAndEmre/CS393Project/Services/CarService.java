@@ -1,12 +1,15 @@
 package com.SaeedAndEmre.CS393Project.Services;
 
 import com.SaeedAndEmre.CS393Project.DTO.CarDTO;
+import com.SaeedAndEmre.CS393Project.DTO.CreateCarDTO;
 import com.SaeedAndEmre.CS393Project.DTO.TypeAndTransmissionDTO;
 import com.SaeedAndEmre.CS393Project.Entities.Car;
 import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Repositories.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,19 +36,25 @@ public class CarService {
 
 
 
-    public void update(Car car) {
-        carRepository.save(car);
-
-    }
 
     public Boolean deleteById(long barcode) {
-        Car car = carRepository.findById(barcode);
+        try {
+            Car car = carRepository.findById(barcode);
             carRepository.deleteById(barcode);
             return true;
+        }catch (EmptyResultDataAccessException e){
+            return false;
+        }
+
     }
 
-    public Car save(Car car) {
-        return carRepository.save(car);
+    public CreateCarDTO save(CreateCarDTO createCarDTO) {
+        Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+        return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.save(car));
+    }
+    public CreateCarDTO update(CreateCarDTO createCarDTO){
+        Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+        return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.update(car));
     }
     public Car findByBarcode(Long barcode){
         return carRepository.findByBarcode(barcode);

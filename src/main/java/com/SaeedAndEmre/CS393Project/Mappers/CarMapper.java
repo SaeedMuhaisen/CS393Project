@@ -2,6 +2,7 @@ package com.SaeedAndEmre.CS393Project.Mappers;
 
 
 import com.SaeedAndEmre.CS393Project.DTO.CarDTO;
+import com.SaeedAndEmre.CS393Project.DTO.CreateCarDTO;
 import com.SaeedAndEmre.CS393Project.Entities.Car;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -15,5 +16,8 @@ public interface CarMapper {
     Car toCar(CarDTO carDTO);
     List<CarDTO> toCarDTOs(List<Car> cars);
     List<Car> toCars(List<CarDTO> CarDTO);
+
+    CreateCarDTO fromCarToCreateCarDTO(Car car);
+    Car fromCreateCarDTOtoCar(CreateCarDTO createCarDTO);
 
 }
