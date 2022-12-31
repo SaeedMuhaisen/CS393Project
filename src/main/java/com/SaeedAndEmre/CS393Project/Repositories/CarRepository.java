@@ -18,9 +18,4 @@ public interface CarRepository extends JpaRepository<Car,Long> {
     Car findByBarcode(long barcode);
     Car save(Car car);
 
-    @Query(nativeQuery = true, value = "UPDATE Car set license_plate_number=?1 and type=?2"+
-            " and brand=?3 and daily_price=?4 and license_plate_number=?5 and mileage=?6 " +
-            "and model=?7 and passenger_capacity=?8 and status=?9 where barcode=?10")
-    Car update(Car car);
-
 }

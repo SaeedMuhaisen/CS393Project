@@ -4,7 +4,7 @@ import javax.persistence.*;
 @Entity
 public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long barcode;
     private String licensePlateNumber;//TODO:int or string?
     private Integer passengerCapacity;

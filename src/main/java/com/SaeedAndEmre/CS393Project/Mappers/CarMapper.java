@@ -20,4 +20,6 @@ public interface CarMapper {
     CreateCarDTO fromCarToCreateCarDTO(Car car);
     Car fromCreateCarDTOtoCar(CreateCarDTO createCarDTO);
 
+    List<CreateCarDTO> fromCarsToCreateCarsDTO(List<Car> cars);
+    List<Car> fromCreateCarDTOSToCars(List<CreateCarDTO> createCarDTOS);
 }

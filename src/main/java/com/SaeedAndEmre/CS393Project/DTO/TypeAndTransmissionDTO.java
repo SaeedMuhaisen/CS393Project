@@ -9,6 +9,10 @@ public class TypeAndTransmissionDTO {
         this.transmissionType = transmissionType;
     }
 
+    public TypeAndTransmissionDTO() {
+
+    }
+
     public String getType() {
         return type;
     }

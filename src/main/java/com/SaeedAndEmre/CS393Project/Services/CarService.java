@@ -37,14 +37,14 @@ public class CarService {
         return CarMapper.INSTANCE.toCarDTOs(result.get());
     }
 
-    public List<CarDTO> findAll() {
+    public List<CreateCarDTO> findAll() {
 
         List<Car> cars=carRepository.findAll();
         if(cars.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
         else{
-            return CarMapper.INSTANCE.toCarDTOs(cars);
+            return CarMapper.INSTANCE.fromCarsToCreateCarsDTO(cars);
         }
 
     }
@@ -70,24 +70,38 @@ public class CarService {
 
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     public CreateCarDTO save(CreateCarDTO createCarDTO) {
-        Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
-        return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.save(car));
+
+        try{
+            Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+            return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.save(car));
+        }catch (Exception e){
+            throw e;
+        }
+
     }
 
-    public CreateCarDTO update(CreateCarDTO createCarDTO){
-        Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
-        return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.update(car));
-    }
+    @Transactional(rollbackFor = {EmptyResultDataAccessException.class})
     public CreateCarDTO findByBarcode(Long barcode){
         try{
             CreateCarDTO res=CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.findByBarcode(barcode));
             return res;
         }catch (EmptyResultDataAccessException e){
-            System.out.println("CAR WAS NOT FOUND!!!!");
             throw e;
         }
 
     }
+
+    @Transactional(rollbackFor = {RuntimeException.class,Exception.class})
+    public void deleteAll(){
+        try{
+            carRepository.deleteAll();
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+    }
+
 }
 

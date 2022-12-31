@@ -68,9 +68,9 @@ public class CarController {
     }
     //DONE
     @GetMapping(value="/cars/all")
-    public ResponseEntity<List<CarDTO>> findAll(){
+    public ResponseEntity<List<CreateCarDTO>> findAll(){
         try {
-            List<CarDTO> cars = carService.findAll();
+            List<CreateCarDTO> cars = carService.findAll();
             return new ResponseEntity<>(cars,HttpStatus.OK);
         }
         catch(EmptyResultDataAccessException e){
@@ -93,10 +93,13 @@ public class CarController {
     //DONE
     @PutMapping(value="/cars/{id}")
     public ResponseEntity<CreateCarDTO> update(@RequestBody CreateCarDTO createCarDTO,@PathVariable(value = "id") int id ){
+        try {
             carService.save(createCarDTO);
-            return new ResponseEntity<>(createCarDTO,HttpStatus.OK);
+            return new ResponseEntity<>(createCarDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
 
     //EXTRA METHOD BUT EXCEPTION NOT WORKING
     @GetMapping(value="/cars/{id}")
@@ -104,8 +107,8 @@ public class CarController {
             try {
                 CreateCarDTO createCarDTO = carService.findByBarcode(barcode);
                 return new ResponseEntity(createCarDTO, HttpStatus.OK);
-            }catch(Exception e){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }catch(EmptyResultDataAccessException e){
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
     }
 }
