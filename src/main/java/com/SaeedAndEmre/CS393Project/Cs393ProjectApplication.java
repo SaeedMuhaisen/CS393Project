@@ -5,11 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Cs393ProjectApplication {
-	//TODO: can we use carrepo from inside reservationservices or must be reservationrep
-	//TODO: for 2 item DTOs, can we use RequestParam x2? or 1 RequestBody and 1 pathvariable? (check addservice and equipments in reservations
-	//TODO: i cannot return response entities from services correct?
-	//TODO: Is base methods accessable from controller?
 
+	/*TODO!!!! --> Change all inputs and outputs from dtos to entities in Service layer,
+	 * turns out we only need to use Dtos in controller
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(Cs393ProjectApplication.class, args);
 	}
