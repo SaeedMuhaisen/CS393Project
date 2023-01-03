@@ -4,6 +4,7 @@ import com.SaeedAndEmre.CS393Project.DTO.EquipmentDTO;
 import com.SaeedAndEmre.CS393Project.Entities.Equipment;
 import com.SaeedAndEmre.CS393Project.Mappers.EquipmentMapper;
 import com.SaeedAndEmre.CS393Project.Services.EquipmentService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ public class EquipmentController {
     EquipmentService equipmentService;
 
     @PostMapping(value="/Equipments/new")
+    @Operation(summary = "Save a new equipment",
+            description = "Insert equipment details below")
     public ResponseEntity<EquipmentDTO> save(EquipmentDTO equipmentDTO){
         try{
             Equipment equipment= EquipmentMapper.INSTANCE.toEquipment(equipmentDTO);
@@ -28,6 +31,8 @@ public class EquipmentController {
         }
     }
     @GetMapping(value = "/Equipments/{id}")
+    @Operation(summary = "Search equipments with id",
+            description = "Insert equipment id below")
     public ResponseEntity<EquipmentDTO> findById(@PathVariable(value = "id") Long id){
         try{
             Equipment equipment= equipmentService.findById(id);
@@ -39,6 +44,7 @@ public class EquipmentController {
     }
 
     @GetMapping(value="/Equipments")
+    @Operation(summary = "List All Equipments")
     public ResponseEntity<List<EquipmentDTO>> findAll(){
         try{
             return new ResponseEntity<>(EquipmentMapper.INSTANCE.toEquipmentDTOS(equipmentService.findAll()), HttpStatus.OK);

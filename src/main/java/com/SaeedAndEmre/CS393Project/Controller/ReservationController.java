@@ -12,6 +12,7 @@ import com.SaeedAndEmre.CS393Project.Repositories.MemberRepository;
 import com.SaeedAndEmre.CS393Project.Repositories.ServicesRepository;
 import com.SaeedAndEmre.CS393Project.Services.CarService;
 import com.SaeedAndEmre.CS393Project.Services.ReservationServices;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -38,6 +39,8 @@ public class ReservationController {
     //TODO: Response status is not clear, are we sending 406 or 206 when car is not available?
     @PostMapping(value = "/reservation/new")
     @ResponseStatus(HttpStatus.ACCEPTED)
+
+    @Operation(summary = "Create a new Reservation",description = "Fill below the required parts, If you dont need any extra services or equipments leave the field with 0 inside ")
     public ResponseEntity<ReservationInfoDTO> save(@RequestBody ReservationDTO reservationDTO) {
         try{
             ReservationInfoDTO reservationInfoDTO=reservationServices.save(reservationDTO);
@@ -48,7 +51,8 @@ public class ReservationController {
         }
     }
     @PutMapping(value="reservation/{reservationId}/extraServices")
-    public ResponseEntity<Boolean> addService(@RequestParam Long serviceId,@PathVariable(value="reservationId") Long reservationId){
+    @Operation(summary = "add a services to an already existing reservation",description = "insert reservationId, and service id that you would like to add")
+    public ResponseEntity<Boolean> addService(@RequestParam (defaultValue = "0") Long serviceId,@PathVariable(value="reservationId") Long reservationId){
         try{
             Boolean response=reservationServices.addService(serviceId,reservationId);
             if(response){
@@ -64,6 +68,7 @@ public class ReservationController {
 
 
     }
+    @Operation(summary = "add an equipment to an already existing reservation",description = "insert reservationId, and equipment id that you would like to add")
     @PutMapping(value="reservation/{reservationId}/extraEquipment")
     public ResponseEntity<Boolean> addEquipment(@RequestParam(defaultValue = "0") Long equipmentId,@PathVariable(value="reservationId") Long reservationId){
         try{
@@ -81,6 +86,8 @@ public class ReservationController {
 
     }
     @PutMapping(value="reservation/{reservationId}/cancel")
+    @Operation(summary = "Cancel your active reservation",description = "insert reservationId bellow")
+
     public ResponseEntity<Boolean> cancelReservation(@PathVariable (value="reservationId") Long reservationId){
         try{
             Boolean response=reservationServices.cancelReservation(reservationId);
@@ -96,6 +103,7 @@ public class ReservationController {
         }
     }
 
+    @Operation(summary = "Confirm finishing your reservation and returning the car",description = "insert reservationId")
     @PutMapping(value="reservation/{reservationId}/finish")
     public ResponseEntity<Boolean> finsihReservation(@PathVariable(value = "reservationId") Long reservationId) {
         try {

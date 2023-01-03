@@ -7,6 +7,7 @@ import com.SaeedAndEmre.CS393Project.Entities.Member;
 import com.SaeedAndEmre.CS393Project.Mappers.LocationMapper;
 import com.SaeedAndEmre.CS393Project.Mappers.MemberMapper;
 import com.SaeedAndEmre.CS393Project.Services.LocationService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ public class LocationController {
     @Autowired
     LocationService locationService;
 
+    @Operation(summary = "Save a new Location",
+            description = "Insert Location details below")
     @PostMapping(value = "/Locations/new")
     public ResponseEntity<LocationDTO> save(LocationDTO locationDTO){
         try{
@@ -33,8 +36,10 @@ public class LocationController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
-    @GetMapping(value="/Locations/{id}")
-    public ResponseEntity<LocationDTO> findById(@PathVariable(value = "id") int code){
+
+    @Operation(summary = "Find a location by its code")
+    @GetMapping(value="/Locations/{code}")
+    public ResponseEntity<LocationDTO> findById(@PathVariable(value = "code") int code){
         try{
             Location location= locationService.findById(code);
             LocationDTO result=LocationMapper.INSTANCE.toLocationDTO(location);
@@ -44,6 +49,7 @@ public class LocationController {
         }
     }
     @GetMapping(value = "/Locations")
+    @Operation(summary = "List all Locations")
     public ResponseEntity<List<LocationDTO>> findAll(){
         try{
             return new ResponseEntity<>(LocationMapper.INSTANCE.toLocationDTOS(locationService.findAll()), HttpStatus.OK);

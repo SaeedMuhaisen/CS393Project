@@ -10,6 +10,7 @@ import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Services.CarService;
 
 import com.SaeedAndEmre.CS393Project.Services.ReservationServices;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,10 @@ public class CarController {
     ReservationServices reservationServices;
 
     //DONE
-    @RequestMapping(value="/cars",method= RequestMethod.GET)
+    @RequestMapping(value="/cars/TypeAndTransmission",method= RequestMethod.GET)
+    @Operation(summary = "Find available cars by type and transmission type",
+            description = "insert type and transmission type")
+
     public ResponseEntity<List<CarDTO>> findAvailableByTypeAndTransmission(@RequestParam String type,@RequestParam String transmissionType){
             List<Car> cars= carService.findAvailableByTypeAndTransmission
                     (type,transmissionType);
@@ -44,6 +48,7 @@ public class CarController {
     }
     //DONE
     @GetMapping(value="/cars/unavailable")
+    @Operation(summary = "Find All rented cars")
     public ResponseEntity<List<RentedCarsDTO>> findAllRented() {
 
         try {
@@ -63,8 +68,10 @@ public class CarController {
         }
     }
     //DONE
-    @DeleteMapping(value="/cars/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable (name="id",required = false) Long barcode) {
+    @DeleteMapping(value="/cars/{barcode}")
+    @Operation(summary = "Delete a car by inserting its barcode",
+            description = "insert barcode")
+    public ResponseEntity<Boolean> deleteById(@PathVariable (name="barcode") Long barcode) {
         try {
             Boolean response = carService.deleteById(barcode);
             if (response) {
@@ -79,7 +86,8 @@ public class CarController {
         }
     }
     //DONE
-    @GetMapping(value="/cars/all")
+    @Operation(summary = "List all cars")
+    @GetMapping(value="/cars")
     public ResponseEntity<List<CreateCarDTO>> findAll(){
         try {
             List<CreateCarDTO> cars = CarMapper.INSTANCE.fromCarsToCreateCarsDTO(carService.findAll());
@@ -90,7 +98,8 @@ public class CarController {
         }
 
     }
-    //TODO:What type of exceptions can happen here?
+    @Operation(summary = "Add a new car to your inventory",
+            description = "insert Car details below")
     @RequestMapping(value="/cars/new",method = RequestMethod.POST)
     public ResponseEntity<CreateCarDTO> save(@RequestBody CreateCarDTO createCarDTO){
         try {
@@ -103,8 +112,10 @@ public class CarController {
 
 
     //DONE
-    @PutMapping(value="/cars/{id}")
-    public ResponseEntity<CreateCarDTO> update(@RequestBody CreateCarDTO createCarDTO,@PathVariable(value = "id") int id ){
+    @PutMapping(value="/cars/{barcode}")
+    @Operation(summary = "Update an already existing car",
+            description = "insert all details new and old of the car you are updating ")
+    public ResponseEntity<CreateCarDTO> update(@RequestBody CreateCarDTO createCarDTO,@PathVariable(value = "barcode") int id ){
         try {
             carService.save(CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO));
             return new ResponseEntity<>(createCarDTO, HttpStatus.OK);
@@ -113,9 +124,11 @@ public class CarController {
         }
     }
 
-    //EXTRA METHOD BUT EXCEPTION NOT WORKING
-    @GetMapping(value="/cars/{id}")
-    public ResponseEntity<CreateCarDTO> findByBarcode(@RequestParam(name="id",required = false) Long barcode) {
+
+    @Operation(summary = "Find a car by barcode",
+            description = "insert Car details below")
+    @GetMapping(value="/cars/{barcode}")
+    public ResponseEntity<CreateCarDTO> findByBarcode(@RequestParam(name="barcode",defaultValue = "0") Long barcode) {
             try {
                 CreateCarDTO createCarDTO = CarMapper.INSTANCE.fromCarToCreateCarDTO(carService.findByBarcode(barcode));
                 return new ResponseEntity(createCarDTO, HttpStatus.OK);

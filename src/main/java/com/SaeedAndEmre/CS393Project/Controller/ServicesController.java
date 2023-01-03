@@ -7,6 +7,7 @@ import com.SaeedAndEmre.CS393Project.Entities.Services;
 import com.SaeedAndEmre.CS393Project.Mappers.EquipmentMapper;
 import com.SaeedAndEmre.CS393Project.Mappers.ServicesMapper;
 import com.SaeedAndEmre.CS393Project.Services.ServicesService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ public class ServicesController {
     @Autowired
     ServicesService servicesService;
 
+    @Operation(summary = "Add a new Service",
+            description = "Insert Service details below")
     @PostMapping(value="/Services/new")
     public ResponseEntity<ServicesDTO> save(ServicesDTO servicesDTO){
         try{
@@ -34,6 +37,8 @@ public class ServicesController {
         }
     }
     @GetMapping(value = "/Services/{id}")
+    @Operation(summary = "find a Service by its id",
+            description = "Insert Service Id below")
     public ResponseEntity<ServicesDTO> findById(@PathVariable(value = "id") Long id){
         try{
             Services services= servicesService.findById(id);
@@ -44,6 +49,7 @@ public class ServicesController {
         }
     }
 
+    @Operation(summary = "List all existing services")
     @GetMapping(value="/Services")
     public ResponseEntity<List<ServicesDTO>> findAll(){
         try{
