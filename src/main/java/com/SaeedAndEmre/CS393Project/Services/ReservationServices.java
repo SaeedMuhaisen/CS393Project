@@ -59,7 +59,7 @@ public class ReservationServices {
             } else {
                 car.get().setStatus(Car.CarStatus.LOANED);
                 Reservation reservation = new Reservation();
-                reservation.setReservationNumber(Integer.parseInt(RandomStringUtils.randomNumeric(8)));
+                reservation.setReservationNumber(RandomStringUtils.randomNumeric(8));
                 reservation.setServices(services);
                 reservation.setEquipments(equipments);
                 reservation.setCar(car.get());

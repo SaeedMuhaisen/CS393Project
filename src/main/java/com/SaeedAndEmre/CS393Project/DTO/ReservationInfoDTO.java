@@ -5,19 +5,14 @@ import com.SaeedAndEmre.CS393Project.Entities.Location;
 import java.time.LocalDateTime;
 
 public class ReservationInfoDTO {
-    private Long reservationNumber;
+    private String reservationNumber;
     private LocalDateTime pickUpDate;
     private LocalDateTime dropOffDate;
     private Integer pickUpLocation; //Location.code
     private Integer dropOffLocation;
     private Double totalAmount;
 
-    public ReservationInfoDTO(Long reservationNumber,
-                              LocalDateTime pickUpDate,
-                              LocalDateTime dropOffDate,
-                              Integer pickUpLocation,
-                              Integer dropOffLocation,
-                              Double totalAmount) {
+    public ReservationInfoDTO(String reservationNumber, LocalDateTime pickUpDate, LocalDateTime dropOffDate, Integer pickUpLocation, Integer dropOffLocation, Double totalAmount) {
         this.reservationNumber = reservationNumber;
         this.pickUpDate = pickUpDate;
         this.dropOffDate = dropOffDate;
@@ -26,15 +21,11 @@ public class ReservationInfoDTO {
         this.totalAmount = totalAmount;
     }
 
-    public ReservationInfoDTO() {
-
-    }
-
-    public Long getReservationNumber() {
+    public String getReservationNumber() {
         return reservationNumber;
     }
 
-    public void setReservationNumber(Long reservationNumber) {
+    public void setReservationNumber(String reservationNumber) {
         this.reservationNumber = reservationNumber;
     }
 
