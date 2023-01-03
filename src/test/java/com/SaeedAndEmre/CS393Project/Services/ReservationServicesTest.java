@@ -7,9 +7,11 @@ import com.SaeedAndEmre.CS393Project.Repositories.EquipmentRepository;
 import com.SaeedAndEmre.CS393Project.Repositories.LocationRepository;
 import com.SaeedAndEmre.CS393Project.Repositories.MemberRepository;
 import com.SaeedAndEmre.CS393Project.Repositories.ServicesRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@AutoConfigureTestDatabase
 class ReservationServicesTest {
     @Autowired
     CarService carService;
@@ -42,6 +45,11 @@ class ReservationServicesTest {
     Location location1;
     Member member;
 
+    @BeforeEach
+
+    public void reset(){
+        reservationServices.deleteAll();
+    }
 
     @BeforeEach
     public void insertingCars(){

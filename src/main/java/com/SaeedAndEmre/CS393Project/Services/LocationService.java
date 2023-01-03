@@ -41,4 +41,7 @@ public class LocationService {
             return locations;
         }
     }
+    public void deleteAll(){
+        locationRepository.deleteAll();
+    }
 }

@@ -2,19 +2,28 @@ package com.SaeedAndEmre.CS393Project.Services;
 
 import com.SaeedAndEmre.CS393Project.Entities.Member;
 import com.SaeedAndEmre.CS393Project.Entities.Services;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@AutoConfigureTestDatabase
 class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
 
+    @BeforeEach
+
+    public void reset(){
+        memberService.deleteAll();
+    }
     @Test
     void save() {
         Member member=new Member();

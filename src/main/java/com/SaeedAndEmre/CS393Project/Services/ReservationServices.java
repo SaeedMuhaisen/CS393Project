@@ -173,7 +173,9 @@ public class ReservationServices {
         }
     }
 
-
+    public void deleteAll(){
+        reservationRepository.deleteAll();
+    }
 
 }
 

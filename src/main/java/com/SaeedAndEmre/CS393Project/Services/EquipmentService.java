@@ -41,4 +41,7 @@ public class EquipmentService {
             return equipments;
         }
     }
+    public void deleteAll(){
+        equipmentRepository.deleteAll();
+    }
 }

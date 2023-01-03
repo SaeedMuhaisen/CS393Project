@@ -42,4 +42,7 @@ public class MemberService {
             return members;
         }
     }
+    public void deleteAll(){
+        memberRepository.deleteAll();
+    }
 }

@@ -2,19 +2,27 @@ package com.SaeedAndEmre.CS393Project.Services;
 
 import com.SaeedAndEmre.CS393Project.Entities.Equipment;
 import com.SaeedAndEmre.CS393Project.Entities.Location;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@AutoConfigureTestDatabase
 class LocationServiceTest {
 
     @Autowired
     LocationService locationService;
+    @BeforeEach
 
+    public void reset(){
+        locationService.deleteAll();
+    }
     @Test
     void save() {
         Location location=new Location();

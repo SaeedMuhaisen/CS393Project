@@ -40,5 +40,8 @@ public class ServicesService {
             return result;
         }
     }
+    public void deleteAll(){
+        servicesRepository.deleteAll();
+    }
 
 }

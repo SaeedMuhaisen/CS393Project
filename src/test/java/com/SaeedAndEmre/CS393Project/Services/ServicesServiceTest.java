@@ -2,18 +2,27 @@ package com.SaeedAndEmre.CS393Project.Services;
 
 import com.SaeedAndEmre.CS393Project.Entities.Equipment;
 import com.SaeedAndEmre.CS393Project.Entities.Services;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@AutoConfigureTestDatabase
 class ServicesServiceTest {
     @Autowired
     ServicesService servicesService;
 
+    @BeforeEach
+
+    public void reset(){
+        servicesService.deleteAll();
+    }
     @Test
     void save() {
         Services services=new Services();

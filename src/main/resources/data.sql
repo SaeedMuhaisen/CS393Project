@@ -7,9 +7,6 @@ VALUES ('John Smith', '123 Main St', 'john.smith@example.com', '123-456-7890', '
 INSERT INTO location (code, name, address)
 VALUES (1, 'Istanbul Airport', 'Istanbul, Turkey');
 
-/*INSERT INTO reservation ( car_id, creation_date, pick_up_date, drop_off_date, pick_up_location_code, drop_off_location_code, return_date, status, member_id)
-VALUES (1, '2022-01-01 10:00:00', '2022-01-01 12:00:00', '2022-01-03 12:00:00', 1, 1, '2022-01-03 14:00:00', 'ACTIVE', 1);*/
-
 INSERT INTO equipment (name, price)
 VALUES ('Snow Tyres', 50.00);
 
