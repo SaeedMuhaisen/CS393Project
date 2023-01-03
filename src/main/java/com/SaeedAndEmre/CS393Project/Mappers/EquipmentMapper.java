@@ -12,7 +12,6 @@ public interface EquipmentMapper {
     EquipmentMapper INSTANCE= Mappers.getMapper(EquipmentMapper.class);
 
     List<EquipmentDTO> toEquipmentDTOS(List<Equipment> equipments);
-    List<Equipment> toEquipments(List<EquipmentDTO> equipmentDTOS);
 
     Equipment toEquipment(EquipmentDTO equipmentDTO);
     EquipmentDTO toEquipmentDTO(Equipment equipment);
