@@ -13,16 +13,14 @@ public class MemberDTO {
     private String email;
     private String phone;
     private String drivingLicenseNumber;
-    private List<ReservationDTO> reservations;
 
-    public MemberDTO(Long id, String name, String address, String email, String phone, String drivingLicenseNumber, List<ReservationDTO> reservations) {
+    public MemberDTO(Long id, String name, String address, String email, String phone, String drivingLicenseNumber) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.email = email;
         this.phone = phone;
         this.drivingLicenseNumber = drivingLicenseNumber;
-        this.reservations = reservations;
     }
 
     public Long getId() {
@@ -71,13 +69,5 @@ public class MemberDTO {
 
     public void setDrivingLicenseNumber(String drivingLicenseNumber) {
         this.drivingLicenseNumber = drivingLicenseNumber;
-    }
-
-    public List<ReservationDTO> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<ReservationDTO> reservations) {
-        this.reservations = reservations;
     }
 }

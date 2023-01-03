@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.xml.crypto.Data;
 import java.util.List;
@@ -21,30 +22,27 @@ public class CarService {
     CarRepository carRepository;
 
 
-    public List<CarDTO> findAvailableByTypeAndTransmission(TypeAndTransmissionDTO typeAndTransmissionDTO){
-        Optional<List<Car>> cars=carRepository.findAvailableByTypeAndTransmission(typeAndTransmissionDTO.getType(),
-                typeAndTransmissionDTO.getTransmissionType());
-        if(!cars.isPresent()){
-            throw new EmptyResultDataAccessException(1);
-        }
-        return CarMapper.INSTANCE.toCarDTOs(cars.get());
+    public List<Car> findAvailableByTypeAndTransmission(String type,String transmissionType){
+
+        return carRepository.findAvailableByTypeAndTransmission(type,
+                transmissionType).get();
     }
-    public List<CarDTO> findAllRented() {
-        Optional<List<Car>> result= carRepository.findAllRented();
-        if(!result.isPresent()){
+    public List<Car> findAllRented() {
+        List<Car> result= carRepository.findAllRented();
+        if(result.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
-        return CarMapper.INSTANCE.toCarDTOs(result.get());
+        return result;
     }
 
-    public List<CreateCarDTO> findAll() {
+    public List<Car> findAll() {
 
         List<Car> cars=carRepository.findAll();
         if(cars.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
         else{
-            return CarMapper.INSTANCE.fromCarsToCreateCarsDTO(cars);
+            return cars;
         }
 
     }
@@ -71,11 +69,11 @@ public class CarService {
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    public CreateCarDTO save(CreateCarDTO createCarDTO) {
+    public Car save(Car car) {
 
         try{
-            Car car=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
-            return CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.save(car));
+            Car result=carRepository.save(car);
+            return result;
         }catch (Exception e){
             throw e;
         }
@@ -83,9 +81,9 @@ public class CarService {
     }
 
     @Transactional(rollbackFor = {EmptyResultDataAccessException.class})
-    public CreateCarDTO findByBarcode(Long barcode){
+    public Car findByBarcode(Long barcode){
         try{
-            CreateCarDTO res=CarMapper.INSTANCE.fromCarToCreateCarDTO(carRepository.findByBarcode(barcode));
+            Car res=carRepository.findByBarcode(barcode);
             return res;
         }catch (EmptyResultDataAccessException e){
             throw e;
@@ -102,6 +100,8 @@ public class CarService {
             throw new RuntimeException();
         }
     }
+
+
 
 }
 

@@ -13,15 +13,13 @@ import com.SaeedAndEmre.CS393Project.Repositories.ServicesRepository;
 import com.SaeedAndEmre.CS393Project.Services.CarService;
 import com.SaeedAndEmre.CS393Project.Services.ReservationServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLDataException;
-import java.sql.SQLException;
-import java.util.List;
 //TODO:Do we map here or in services?
 
 @RestController
@@ -44,14 +42,15 @@ public class ReservationController {
         try{
             ReservationInfoDTO reservationInfoDTO=reservationServices.save(reservationDTO);
             return new ResponseEntity<>(reservationInfoDTO,HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.PARTIAL_CONTENT);
         }
     }
     @PutMapping(value="reservation/{reservationId}/extraServices")
-    public ResponseEntity<Boolean> addService(@RequestBody ExtraServiceDTO extraServiceDTO,@PathVariable Long reservationId){
+    public ResponseEntity<Boolean> addService(@RequestParam Long serviceId,@PathVariable(value="reservationId") Long reservationId){
         try{
-            Boolean response=reservationServices.addService(extraServiceDTO);
+            Boolean response=reservationServices.addService(serviceId,reservationId);
             if(response){
                 return new ResponseEntity<>(true, HttpStatus.OK);
             }
@@ -66,9 +65,9 @@ public class ReservationController {
 
     }
     @PutMapping(value="reservation/{reservationId}/extraEquipment")
-    public ResponseEntity<Boolean> addEquipment(@RequestBody ExtraEquipmentDTO extraEquipmentDTO,@PathVariable Long reservationId){
+    public ResponseEntity<Boolean> addEquipment(@RequestParam(defaultValue = "0") Long equipmentId,@PathVariable(value="reservationId") Long reservationId){
         try{
-            Boolean response=reservationServices.addEquipment(extraEquipmentDTO);
+            Boolean response=reservationServices.addEquipment(equipmentId,reservationId);
             if(response){
                 return new ResponseEntity<>(true, HttpStatus.OK);
             }
@@ -81,8 +80,8 @@ public class ReservationController {
         }
 
     }
-    @PutMapping(value="reservation/{reservationId}")
-    public ResponseEntity<Boolean> cancelReservation(@PathVariable Long reservationId){
+    @PutMapping(value="reservation/{reservationId}/cancel")
+    public ResponseEntity<Boolean> cancelReservation(@PathVariable (value="reservationId") Long reservationId){
         try{
             Boolean response=reservationServices.cancelReservation(reservationId);
             if(response){
@@ -92,8 +91,23 @@ public class ReservationController {
                 return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
             }
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
+
+    @PutMapping(value="reservation/{reservationId}/finish")
+    public ResponseEntity<Boolean> finsihReservation(@PathVariable(value = "reservationId") Long reservationId) {
+        try {
+            reservationServices.finishReservation(reservationId);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+
+        } catch (EmptyResultDataAccessException e) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

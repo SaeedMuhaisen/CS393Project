@@ -14,4 +14,7 @@ public interface ServicesMapper {
     ServicesMapper INSTANCE= Mappers.getMapper(ServicesMapper.class);
 
     List<ServicesDTO> toServicesDTOS(List<Services> services);
+
+    Services toService(ServicesDTO servicesDTO);
+    ServicesDTO toServiceDTO(Services services);
 }

@@ -5,10 +5,11 @@ import com.SaeedAndEmre.CS393Project.Entities.Location;
 import com.SaeedAndEmre.CS393Project.Repositories.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class LocationService {
     @Autowired
     LocationRepository locationRepository;

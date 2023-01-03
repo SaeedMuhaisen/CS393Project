@@ -5,10 +5,11 @@ import com.SaeedAndEmre.CS393Project.Entities.Services;
 import com.SaeedAndEmre.CS393Project.Repositories.ServicesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class ServicesService {
     @Autowired
     ServicesRepository servicesRepository;

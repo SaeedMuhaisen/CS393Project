@@ -40,9 +40,8 @@ public class CarServiceTests {
         test.setDailyPrice(15.5f);
         test.setMileage(0);
         test.setBrand("BMW");
-        CreateCarDTO createCarDTO=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test));
-        test.setBarcode(createCarDTO.getBarcode());
-        Car result=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+        test.setBarcode(carService.save(test).getBarcode());
+        Car result=carService.findByBarcode(test.getBarcode());
         assertEquals(test.getStatus(),result.getStatus());
         assertEquals(test.getType(),result.getType());
         assertEquals(test.getBarcode(),result.getBarcode());
@@ -67,17 +66,16 @@ public class CarServiceTests {
         test.setDailyPrice(15.5f);
         test.setMileage(0);
         test.setBrand("BMW");
-        CreateCarDTO createCarDTO=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test));
-        test.setBarcode(createCarDTO.getBarcode());
-        Car result=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+        test.setBarcode(carService.save(test).getBarcode());
+        Car result=carService.findByBarcode(test.getBarcode());
         assertEquals(test.getStatus(),result.getStatus());
         assertEquals(test.getType(),result.getType());
 
         test.setStatus(Car.CarStatus.LOANED);
         test.setMileage(100);
         test.setBrand("ABC");
-        createCarDTO=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test));
-        result=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+        result=carService.findByBarcode(test.getBarcode());
+
 
         assertEquals(test.getStatus(),result.getStatus());
         assertEquals(test.getMileage(),result.getMileage());
@@ -86,8 +84,7 @@ public class CarServiceTests {
 
         test.setBarcode(2L);
         test.setBrand("bbbb");
-        carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test));
-        int i=0;
+        carService.save(test);
 
     }
     @Test
@@ -103,10 +100,9 @@ public class CarServiceTests {
         test.setDailyPrice(15.5f);
         test.setMileage(0);
         test.setBrand("BMW");
-        CreateCarDTO createCarDTO=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test));
-        test.setBarcode(createCarDTO.getBarcode());
+        test.setBarcode(carService.save(test).getBarcode());
 
-        Car result=CarMapper.INSTANCE.fromCreateCarDTOtoCar(carService.findByBarcode(test.getBarcode()));
+        Car result=carService.findByBarcode(test.getBarcode());
 
         assertEquals(test.getStatus(),result.getStatus());
         assertEquals(test.getType(),result.getType());
@@ -132,10 +128,9 @@ public class CarServiceTests {
         test1.setDailyPrice(15.5f);
         test1.setMileage(0);
         test1.setBrand("BMW");
-        CreateCarDTO createCarDTO1=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test1));
-        test1.setBarcode(createCarDTO1.getBarcode());
+        test1.setBarcode(carService.save(test1).getBarcode());
 
-        Car result1=CarMapper.INSTANCE.fromCreateCarDTOtoCar(carService.findByBarcode(test1.getBarcode()));
+        Car result1=carService.findByBarcode(test1.getBarcode());
 
         Car test2=new Car();
         test2.setStatus(Car.CarStatus.AVAILABLE);
@@ -147,10 +142,9 @@ public class CarServiceTests {
         test2.setDailyPrice(15.5f);
         test2.setMileage(0);
         test2.setBrand("BMW");
-        CreateCarDTO createCarDTO2=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test2));
-        test2.setBarcode(createCarDTO2.getBarcode());
+        test2.setBarcode(carService.save(test2).getBarcode());
 
-        Car result2=CarMapper.INSTANCE.fromCreateCarDTOtoCar(carService.findByBarcode(test2.getBarcode()));
+        Car result2=carService.findByBarcode(test2.getBarcode());
 
         Car test3=new Car();
         test3.setStatus(Car.CarStatus.AVAILABLE);
@@ -162,12 +156,11 @@ public class CarServiceTests {
         test3.setDailyPrice(15.5f);
         test3.setMileage(0);
         test3.setBrand("BMW");
-        CreateCarDTO createCarDTO3=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test3));
-        test3.setBarcode(createCarDTO3.getBarcode());
+        test3.setBarcode(carService.save(test3).getBarcode());
 
-        Car result3=CarMapper.INSTANCE.fromCreateCarDTOtoCar(carService.findByBarcode(test3.getBarcode()));
+        Car result3=carService.findByBarcode(test3.getBarcode());
 
-        List<Car> cars=CarMapper.INSTANCE.fromCreateCarDTOSToCars(carService.findAll());
+        List<Car> cars=carService.findAll();
 
         assertEquals(cars.size(),3);
 
@@ -217,10 +210,9 @@ public class CarServiceTests {
         test1.setDailyPrice(15.5f);
         test1.setMileage(0);
         test1.setBrand("BMW");
-        CreateCarDTO createCarDTO1=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test1));
-        test1.setBarcode(createCarDTO1.getBarcode());
+        test1.setBarcode(carService.save(test1).getBarcode());
 
-        Car result1=CarMapper.INSTANCE.fromCreateCarDTOtoCar(carService.findByBarcode(test1.getBarcode()));
+        Car result=carService.findByBarcode(test1.getBarcode());
 
         Car test2=new Car();
         test2.setStatus(Car.CarStatus.AVAILABLE);
@@ -232,16 +224,15 @@ public class CarServiceTests {
         test2.setDailyPrice(15.5f);
         test2.setMileage(0);
         test2.setBrand("BMW");
-        CreateCarDTO createCarDTO2=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test2));
-        test2.setBarcode(createCarDTO2.getBarcode());
+        test2.setBarcode(carService.save(test2).getBarcode());
 
-        Car result2=CarMapper.INSTANCE.fromCreateCarDTOtoCar(carService.findByBarcode(test2.getBarcode()));
+        Car result2=carService.findByBarcode(test2.getBarcode());
 
         TypeAndTransmissionDTO a=new TypeAndTransmissionDTO();
         a.setType("SUV");
         a.setTransmissionType("AUTOMATIC");
 
-        List<Car> cars=CarMapper.INSTANCE.toCars(carService.findAvailableByTypeAndTransmission(a));
+        List<Car> cars=carService.findAvailableByTypeAndTransmission(a.getType(),a.getTransmissionType());
 
         assertEquals(1,cars.size());
         assertEquals(cars.get(0).getBarcode(),test1.getBarcode());
@@ -251,7 +242,7 @@ public class CarServiceTests {
 
         a.setType("STANDARD");
         a.setTransmissionType("AUTOMATIC");
-        cars=CarMapper.INSTANCE.toCars(carService.findAvailableByTypeAndTransmission(a));
+        cars=carService.findAvailableByTypeAndTransmission(a.getType(),a.getTransmissionType());
 
         assertEquals(1,cars.size());
         assertEquals(cars.get(0).getBarcode(),test2.getBarcode());
@@ -271,15 +262,15 @@ public class CarServiceTests {
         test.setDailyPrice(15.5f);
         test.setMileage(0);
         test.setBrand("BMW");
-        CreateCarDTO createCarDTO=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test));
-        test.setBarcode(createCarDTO.getBarcode());
-        Car result=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+        test.setBarcode(carService.save(test).getBarcode());
+
+        Car result=carService.findByBarcode(test.getBarcode());
         assertEquals(test.getStatus(),result.getStatus());
         assertEquals(test.getType(),result.getType());
 
         carService.deleteById(result.getBarcode());
 
-        Optional<CreateCarDTO> result1= Optional.ofNullable(carService.findByBarcode(test.getBarcode()));
+        Optional<Car> result1= Optional.ofNullable(carService.findByBarcode(test.getBarcode()));
         assert(result1.isEmpty());
     }
 }

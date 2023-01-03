@@ -1,21 +1,14 @@
-package com.SaeedAndEmre.CS393Project.Entities;
+package com.SaeedAndEmre.CS393Project.DTO;
 
-import javax.persistence.*;
-@Entity
-public class Location {
-    //TODO: Are we using name and code as id, or just name?
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class LocationDTO {
     private int code;
     private String name;
     private String address;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public LocationDTO(int code, String name, String address) {
+        this.code = code;
         this.name = name;
+        this.address = address;
     }
 
     public int getCode() {
@@ -24,6 +17,14 @@ public class Location {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {

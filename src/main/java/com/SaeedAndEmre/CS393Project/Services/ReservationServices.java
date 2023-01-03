@@ -37,7 +37,7 @@ public class ReservationServices {
     @Autowired
     LocationRepository locationRepository;
 
-    @Transactional(rollbackFor = {Exception.class})
+    @Transactional(rollbackFor = {EmptyResultDataAccessException.class,RuntimeException.class})
     public ReservationInfoDTO save(ReservationDTO reservationDTO) throws Exception {
         Optional<Car> car = carRepository.findById(reservationDTO.getBarcode());
         List<Equipment> equipments = equipmentRepository.findAllById(reservationDTO.getEquipments());
@@ -53,7 +53,6 @@ public class ReservationServices {
             throw new Exception();
         } else {
             if (car.get().getStatus() != Car.CarStatus.AVAILABLE) {
-                System.out.println("THE CAR IS NOT AVAILABLE!!!");
                 throw new Exception();
             } else {
                 car.get().setStatus(Car.CarStatus.LOANED);
@@ -84,64 +83,95 @@ public class ReservationServices {
             }
         }
     }
+
     //todo:should change price?
-    @Transactional(rollbackFor = {Exception.class,EmptyResultDataAccessException.class})
-    public Boolean addService(ExtraServiceDTO extraServiceDTO) {
-        Optional<Reservation> reservation = reservationRepository.findById(extraServiceDTO.getReservationNumber());
-        Optional<Services> service = servicesRepository.findById(extraServiceDTO.getServiceId());
+    @Transactional(rollbackFor = {Exception.class, EmptyResultDataAccessException.class})
+    public Boolean addService(Long serviceId, Long reservationId) {
+        Optional<Reservation> reservation = reservationRepository.findById(reservationId);
+        Optional<Services> service = servicesRepository.findById(serviceId);
         if (reservation.isEmpty()) {
             throw new EmptyResultDataAccessException(1);
         } else if (service.isEmpty() || reservation.get().getServices().contains(service.get())) {
             return false;
-        }
-        else{
+        } else {
             try {
                 reservation.get().getServices().add(service.get());
                 reservationRepository.save(reservation.get());
                 return true;
-            }catch (Exception x){
+            } catch (Exception x) {
                 return false;
             }
 
         }
     }
-    @Transactional(rollbackFor = {Exception.class,EmptyResultDataAccessException.class})
-    public Boolean addEquipment(ExtraEquipmentDTO extraEquipmentDTO) {
-        Boolean x=false;
-        Optional<Reservation> reservation = reservationRepository.findById(extraEquipmentDTO.getReservationNumber());
-        Optional<Equipment> equipment = equipmentRepository.findById(extraEquipmentDTO.getEquipmentId());
+
+    @Transactional(rollbackFor = {Exception.class, EmptyResultDataAccessException.class})
+    public Boolean addEquipment(Long equiptmentId, Long reservationId) {
+        Optional<Reservation> reservation = reservationRepository.findById(reservationId);
+        Optional<Equipment> equipment = equipmentRepository.findById(equiptmentId);
         if (reservation.isEmpty()) {
             throw new EmptyResultDataAccessException(1);
-        } else if (equipment.isEmpty() || reservation.get().getServices().contains(equipment.get())) {
+        } else if (equipment.isEmpty() || reservation.get().getEquipments().contains(equipment.get())) {
             return false;
-        }
-        else{
+        } else {
             try {
                 reservation.get().getEquipments().add(equipment.get());
                 reservationRepository.save(reservation.get());
                 return true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 return false;
             }
         }
     }
-    @Transactional(rollbackFor = {Exception.class,EmptyResultDataAccessException.class})
+
+    @Transactional(rollbackFor = {Exception.class, EmptyResultDataAccessException.class})
     public Boolean cancelReservation(Long reservationId) {
         Optional<Reservation> reservation = reservationRepository.findById(reservationId);
-        if(!reservation.isPresent()){
+        if (!reservation.isPresent()) {
             return false;
-        }
-        else{
+        } else {
             try {
                 reservation.get().setStatus(Reservation.ReservationStatus.CANCELLED);
                 reservation.get().getCar().setStatus(Car.CarStatus.AVAILABLE);
                 return true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw e;
             }
 
         }
 
     }
+
+    public Reservation findByIdAndActive(Long reservationId) {
+        Optional<Reservation> reservation = reservationRepository.findByCarIDAndActive(reservationId);
+        if (!reservation.isEmpty()) {
+            return reservation.get();
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    @Transactional(rollbackFor = {Exception.class, EmptyResultDataAccessException.class})
+    public void finishReservation(Long reservationId) throws Exception {
+        Optional<Reservation> reservation = reservationRepository.findById(reservationId);
+        if (reservation.isEmpty()) {
+            throw new EmptyResultDataAccessException(1);
+        }
+        Optional<Car> car = carRepository.findById(reservation.get().getCar().getBarcode());
+        if (car.isEmpty()) {
+            throw new EmptyResultDataAccessException(1);
+        }
+        try {
+            reservation.get().setStatus(Reservation.ReservationStatus.COMPLETED);
+            reservation.get().setReturnDate(java.time.LocalDateTime.now());
+            car.get().setStatus(Car.CarStatus.AVAILABLE);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
+
+
+
 }
+
 

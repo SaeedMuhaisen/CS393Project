@@ -44,9 +44,8 @@ class ReservationServicesTest {
         test.setDailyPrice(15.5f);
         test.setMileage(0);
         test.setBrand("BMW");
-        CreateCarDTO createCarDTO=carService.save(CarMapper.INSTANCE.fromCarToCreateCarDTO(test));
-        test.setBarcode(createCarDTO.getBarcode());
-        Car result=CarMapper.INSTANCE.fromCreateCarDTOtoCar(createCarDTO);
+        test.setBarcode(carService.save(test).getBarcode());
+        Car result=carService.findByBarcode(test.getBarcode());
         assertEquals(test.getStatus(),result.getStatus());
         assertEquals(test.getType(),result.getType());
 
