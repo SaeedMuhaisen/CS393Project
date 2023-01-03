@@ -26,6 +26,10 @@ public class ReservationInfoDTO {
         this.totalAmount = totalAmount;
     }
 
+    public ReservationInfoDTO() {
+
+    }
+
     public Long getReservationNumber() {
         return reservationNumber;
     }

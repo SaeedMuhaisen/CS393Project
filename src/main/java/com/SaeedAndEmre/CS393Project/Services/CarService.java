@@ -1,18 +1,12 @@
 package com.SaeedAndEmre.CS393Project.Services;
 
-import com.SaeedAndEmre.CS393Project.DTO.CarDTO;
-import com.SaeedAndEmre.CS393Project.DTO.CreateCarDTO;
-import com.SaeedAndEmre.CS393Project.DTO.TypeAndTransmissionDTO;
 import com.SaeedAndEmre.CS393Project.Entities.Car;
-import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Repositories.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PutMapping;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 

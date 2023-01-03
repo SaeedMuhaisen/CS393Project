@@ -30,6 +30,10 @@ public class ReservationDTO {
         this.services = services;
     }
 
+    public ReservationDTO() {
+
+    }
+
     public Long getBarcode() {
         return barcode;
     }

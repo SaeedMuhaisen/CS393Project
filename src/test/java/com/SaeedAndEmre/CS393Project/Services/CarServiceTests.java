@@ -1,10 +1,6 @@
 package com.SaeedAndEmre.CS393Project.Services;
 
-import com.SaeedAndEmre.CS393Project.DTO.CreateCarDTO;
-import com.SaeedAndEmre.CS393Project.DTO.TypeAndTransmissionDTO;
 import com.SaeedAndEmre.CS393Project.Entities.Car;
-import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
-import com.SaeedAndEmre.CS393Project.Services.CarService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -32,7 +28,6 @@ public class CarServiceTests {
         Car test=new Car();
         test.setStatus(Car.CarStatus.AVAILABLE);
         test.setType(Car.CarType.STANDARD);
-        //test.setBarcode(1111L);
         test.setPassengerCapacity(4);
         test.setModel("2004");
         test.setTransmissionType("AUTOMATIC");
@@ -74,6 +69,7 @@ public class CarServiceTests {
         test.setStatus(Car.CarStatus.LOANED);
         test.setMileage(100);
         test.setBrand("ABC");
+        carService.save(test);
         result=carService.findByBarcode(test.getBarcode());
 
 
@@ -228,21 +224,14 @@ public class CarServiceTests {
 
         Car result2=carService.findByBarcode(test2.getBarcode());
 
-        TypeAndTransmissionDTO a=new TypeAndTransmissionDTO();
-        a.setType("SUV");
-        a.setTransmissionType("AUTOMATIC");
 
-        List<Car> cars=carService.findAvailableByTypeAndTransmission(a.getType(),a.getTransmissionType());
+        List<Car> cars=carService.findAvailableByTypeAndTransmission("SUV","AUTOMATIC");
 
         assertEquals(1,cars.size());
         assertEquals(cars.get(0).getBarcode(),test1.getBarcode());
         assertEquals(cars.get(0).getType(),test1.getType());
         assertEquals(cars.get(0).getTransmissionType(),test1.getTransmissionType());
-
-
-        a.setType("STANDARD");
-        a.setTransmissionType("AUTOMATIC");
-        cars=carService.findAvailableByTypeAndTransmission(a.getType(),a.getTransmissionType());
+        cars=carService.findAvailableByTypeAndTransmission("STANDARD","AUTOMATIC");
 
         assertEquals(1,cars.size());
         assertEquals(cars.get(0).getBarcode(),test2.getBarcode());
