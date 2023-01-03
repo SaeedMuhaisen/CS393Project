@@ -6,6 +6,7 @@ import com.SaeedAndEmre.CS393Project.Mappers.CarMapper;
 import com.SaeedAndEmre.CS393Project.Mappers.ReservationMapper;
 import com.SaeedAndEmre.CS393Project.Repositories.*;
 import net.bytebuddy.pool.TypePool;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,6 +22,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ReservationServices {
@@ -57,6 +59,7 @@ public class ReservationServices {
             } else {
                 car.get().setStatus(Car.CarStatus.LOANED);
                 Reservation reservation = new Reservation();
+                reservation.setReservationNumber(Integer.parseInt(RandomStringUtils.randomNumeric(8)));
                 reservation.setServices(services);
                 reservation.setEquipments(equipments);
                 reservation.setCar(car.get());
