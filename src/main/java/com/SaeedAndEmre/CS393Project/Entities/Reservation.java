@@ -57,8 +57,8 @@ public class Reservation {
 
     //Getters and setters
 
-    public String getReservationNumber() {
-        return reservationNumber;
+    public Long getReservationNumber() {
+        return Long.valueOf(reservationNumber);
     }
 
     public void setReservationNumber(String reservationNumber) {

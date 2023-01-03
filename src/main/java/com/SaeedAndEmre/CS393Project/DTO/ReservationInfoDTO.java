@@ -1,7 +1,5 @@
 package com.SaeedAndEmre.CS393Project.DTO;
 
-import com.SaeedAndEmre.CS393Project.Entities.Location;
-
 import java.time.LocalDateTime;
 
 public class ReservationInfoDTO {
@@ -21,8 +19,8 @@ public class ReservationInfoDTO {
         this.totalAmount = totalAmount;
     }
 
-    public String getReservationNumber() {
-        return reservationNumber;
+    public Long getReservationNumber() {
+        return Long.valueOf(reservationNumber);
     }
 
     public void setReservationNumber(String reservationNumber) {
